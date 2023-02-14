@@ -39,18 +39,21 @@ export default function Page(props: any) {
   const params = new URLSearchParams(props.search);
   const isPreviewing = params.has('builder.preview');
   console.log(content)
+  if (!content.data && !isPreviewing) {
+    return <NotFound />;
+  }
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.page,
+      resourceId: content.data.id,
+    },
+  });
   return (
-    <div>
-      {!content.data && !isPreviewing ? (
-        <NotFound />
-      ) : (
-        <Layout>
-          <Suspense></Suspense>
-          <PageHeader heading={content?.data?.data?.title}>
-            <BuilderComponent model={MODEL_NAME} content={content?.data} />
-          </PageHeader>
-        </Layout>
-      )}
-    </div>
+    <Layout>
+      <Suspense></Suspense>
+      <PageHeader heading={content?.data?.data?.title}>
+        <BuilderComponent model={MODEL_NAME} content={content?.data} />
+      </PageHeader>
+    </Layout>
   );
 }
