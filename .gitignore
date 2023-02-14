@@ -6,4 +6,6 @@ dist-ssr
 *.local
 .yarn
 .yarnrc
+.yarnrc.yml
+yarn.lock
 .env
