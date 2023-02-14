@@ -5,6 +5,7 @@ import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 import {Header} from '~/components';
 import {Footer} from '~/components/index.server';
 import {parseMenu} from '~/lib/utils';
+import {AnnouncementBar} from '~/components/global/AnnouncementBar.client';
 
 const HEADER_MENU_HANDLE = 'main-menu';
 const FOOTER_MENU_HANDLE = 'footer';
@@ -23,6 +24,7 @@ export function Layout({children}: {children: React.ReactNode}) {
             Skip to content
           </a>
         </div>
+        <AnnouncementBar />
         <Suspense fallback={<Header title={SHOP_NAME_FALLBACK} />}>
           <HeaderWithMenu />
         </Suspense>
