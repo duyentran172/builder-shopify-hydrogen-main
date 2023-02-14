@@ -4,8 +4,8 @@ export default defineConfig({
   shopify: {
     defaultCountryCode: 'US',
     defaultLanguageCode: 'EN',
-    storeDomain: 'hydrogen-preview.myshopify.com',
-    storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+    storeDomain: 'training-merkle.myshopify.com',
+    storefrontToken: '74c96b8e637b3e53ed8a63bdbd5a16c7',
     storefrontApiVersion: '2022-07',
   },
   session: CookieSessionStorage('__session', {
