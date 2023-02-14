@@ -7,11 +7,12 @@ import {BuilderComponent} from '~/components/BuilderComponent.client';
 import {useQuery} from '@shopify/hydrogen';
 import {builder} from '@builder.io/react';
 
-builder.init('cda38653c81344cf8859bd15e4d8e30d');
+builder.init('5392aabdddfe455c892d9897f30391a0');
 
 const MODEL_NAME = 'page';
 
 export default function Page(props: any) {
+  console.log(props)
   const content = useQuery([MODEL_NAME, props.pathname], async () => {
     return await builder
       .get(MODEL_NAME, {
