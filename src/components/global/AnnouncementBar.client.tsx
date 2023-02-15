@@ -8,7 +8,7 @@ export const AnnouncementBar = () => {
     const [showAnnouncementBar, setShowAnnouncementBar] = useState(true);
 
     useEffect(() => { 
-        builder.get('announcement-bar-duyen')
+        builder.get('announcement-bar')
         .promise().then(setBuilderContentJson);
 
         const isShown = JSON.parse(localStorage.getItem('isShownAnnouncementBar') ?? 'true');
@@ -21,7 +21,7 @@ export const AnnouncementBar = () => {
     return (
         showAnnouncementBar && (
             <BuilderComponent
-                model="announcement-bar-duyen"
+                model="announcement-bar"
                 content={builderContentJson}
                 context={{myFunction: () => {
                     localStorage.setItem('isShownAnnouncementBar', JSON.stringify(false));
