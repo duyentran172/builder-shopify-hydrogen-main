@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BuilderComponent, builder, Builder } from '@builder.io/react';
-import {useUrl} from '@shopify/hydrogen';
 
 builder.init('5392aabdddfe455c892d9897f30391a0')
 

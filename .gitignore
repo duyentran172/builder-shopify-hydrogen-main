@@ -8,4 +8,3 @@ dist-ssr
 .yarnrc
 .yarnrc.yml
 yarn.lock
-.env
