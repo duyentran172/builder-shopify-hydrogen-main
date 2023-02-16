@@ -2,6 +2,8 @@ import {Suspense, useMemo} from 'react';
 import {gql, useShopQuery, useLocalization} from '@shopify/hydrogen';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductCard, Section} from '~/components';
+import { ProductCards } from './ProductCards.client';
+import { ProductCardsCarousel } from './ProductCardsCarousel.client';
 import type {
   Product,
   ProductConnection,
@@ -15,9 +17,13 @@ export function ProductSwimlane({
   count = 12,
   ...props
 }) {
+  console.log(props)
   const productCardsMarkup = useMemo(() => {
     // If the data is already provided, there's no need to query it, so we'll just return the data
     if (typeof data === 'object') {
+      if (props.turnOnCarousel === true) {
+        return <ProductCardsCarousel products={data} />;
+      }
       return <ProductCards products={data} />;
     }
 
@@ -26,44 +32,32 @@ export function ProductSwimlane({
     if (typeof data === 'string') {
       return (
         <Suspense>
-          <RecommendedProducts productId={data} count={count} />
+          <RecommendedProducts productId={data} count={count} turnOnCarousel={props.turnOnCarousel} />
         </Suspense>
       );
     }
 
     // If no data is provided, we'll go and query the top products
-    return <TopProducts count={count} />;
+    return <TopProducts count={count} turnOnCarousel={props.turnOnCarousel} />;
   }, [count, data]);
 
   return (
     <Section heading={title} padding="y" {...props}>
-      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
+      <div className={`swimlane hiddenScroll ${props.turnOnCarousel ? "p-0 block overflow-hidden" : ""}`}>
         {productCardsMarkup}
       </div>
     </Section>
   );
 }
 
-function ProductCards({products}: {products: Product[]}) {
-  return (
-    <>
-      {products.map((product) => (
-        <ProductCard
-          product={product}
-          key={product.id}
-          className={'snap-start w-80'}
-        />
-      ))}
-    </>
-  );
-}
-
 function RecommendedProducts({
   productId,
   count,
+  turnOnCarousel,
 }: {
   productId: string;
   count: number;
+  turnOnCarousel: boolean;
 }) {
   const {
     language: {isoCode: languageCode},
@@ -95,11 +89,13 @@ function RecommendedProducts({
     .indexOf(productId);
 
   mergedProducts.splice(originalProduct, 1);
-
+  if (turnOnCarousel === true) {
+    return <ProductCardsCarousel products={mergedProducts} />;
+  }
   return <ProductCards products={mergedProducts} />;
 }
 
-function TopProducts({count}: {count: number}) {
+function TopProducts({count, turnOnCarousel,}: {count: number; turnOnCarousel: boolean;}) {
   const {
     data: {products},
   } = useShopQuery({
@@ -108,7 +104,9 @@ function TopProducts({count}: {count: number}) {
       count,
     },
   });
-
+  if (turnOnCarousel === true) {
+    return <ProductCardsCarousel products={products.nodes} />;
+  }
   return <ProductCards products={products.nodes} />;
 }
 

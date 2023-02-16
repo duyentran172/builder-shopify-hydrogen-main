@@ -88,6 +88,7 @@ function HomepageContent() {
         data={featuredProducts.products.nodes}
         title={title}
         divider="bottom"
+        turnOnCarousel={turnOnCarousel}
       />
       {secondaryHero && <Hero {...secondaryHero} />}
       <FeaturedCollections
