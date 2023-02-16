@@ -16,7 +16,12 @@ import {Layout, ProductSwimlane} from '~/components/index.server';
 import {
   CollectionConnection,
   ProductConnection,
+  Collection
 } from '@shopify/hydrogen/storefront-api-types';
+
+import {useQuery} from '@shopify/hydrogen';
+import {builder} from '@builder.io/react';
+import {BuilderComponent} from '~/components/BuilderComponent.client';
 
 export default function Homepage() {
   useServerAnalytics({
@@ -43,15 +48,26 @@ function HomepageContent() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
+  const builderIOData = useQuery(['feature-products'], async () => {
+    return await builder
+      .get('feature-products')
+      .promise();
+  });
+
+  const {collections, numberOfProductsDisplayed, title, sortBy, turnOnCarousel} = builderIOData.data.data;
+  
   const {data} = useShopQuery<{
     heroBanners: CollectionConnection;
     featuredCollections: CollectionConnection;
-    featuredProducts: ProductConnection;
+    featuredProducts: Collection;
   }>({
     query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,
       country: countryCode,
+      collectionId: collections.options.collection,
+      numberOfProductsDisplayed: parseInt(numberOfProductsDisplayed),
+      sortKey: sortBy.toString()
     },
     preload: true,
   });
@@ -69,8 +85,8 @@ function HomepageContent() {
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
       <ProductSwimlane
-        data={featuredProducts.nodes}
-        title="Featured Products"
+        data={featuredProducts.products.nodes}
+        title={title}
         divider="bottom"
       />
       {secondaryHero && <Hero {...secondaryHero} />}
@@ -106,11 +122,77 @@ function SeoForHomepage() {
   );
 }
 
+// const HOMEPAGE_CONTENT_QUERY = gql`
+//   ${MEDIA_FRAGMENT}
+//   ${PRODUCT_CARD_FRAGMENT}
+//   query homepage($country: CountryCode, $language: LanguageCode)
+//   @inContext(country: $country, language: $language) {
+//     heroBanners: collections(
+//       first: 3
+//       query: "collection_type:custom"
+//       sortKey: UPDATED_AT
+//     ) {
+//       nodes {
+//         id
+//         handle
+//         title
+//         descriptionHtml
+//         heading: metafield(namespace: "hero", key: "title") {
+//           value
+//         }
+//         byline: metafield(namespace: "hero", key: "byline") {
+//           value
+//         }
+//         cta: metafield(namespace: "hero", key: "cta") {
+//           value
+//         }
+//         spread: metafield(namespace: "hero", key: "spread") {
+//           reference {
+//             ...Media
+//           }
+//         }
+//         spreadSecondary: metafield(namespace: "hero", key: "spread_secondary") {
+//           reference {
+//             ...Media
+//           }
+//         }
+//       }
+//     }
+//     featuredCollections: collections(
+//       first: 3
+//       query: "collection_type:smart"
+//       sortKey: UPDATED_AT
+//     ) {
+//       nodes {
+//         id
+//         title
+//         handle
+//         image {
+//           altText
+//           width
+//           height
+//           url
+//         }
+//       }
+//     }
+//     featuredProducts: products(first: 12) {
+//       nodes {
+//         ...ProductCard
+//       }
+//     }
+//   }
+// `;
+
 const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FRAGMENT}
   ${PRODUCT_CARD_FRAGMENT}
-  query homepage($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
+  query homepage(
+    $country: CountryCode
+    $language: LanguageCode
+    $collectionId: ID!
+    $numberOfProductsDisplayed: Int
+    $sortKey: ProductCollectionSortKeys
+  ) @inContext(country: $country, language: $language) {
     heroBanners: collections(
       first: 3
       query: "collection_type:custom"
@@ -159,9 +241,14 @@ const HOMEPAGE_CONTENT_QUERY = gql`
         }
       }
     }
-    featuredProducts: products(first: 12) {
-      nodes {
-        ...ProductCard
+    featuredProducts: collection(id: $collectionId) {
+      products(
+        first: $numberOfProductsDisplayed
+        sortKey: $sortKey
+      ) {
+        nodes {
+          ...ProductCard
+        }
       }
     }
   }
