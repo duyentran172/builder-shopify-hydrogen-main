@@ -38,7 +38,7 @@ export default function Page(props: any) {
 
   const params = new URLSearchParams(props.search);
   const isPreviewing = params.has('builder.preview');
-  console.log(content)
+
   if (!content.data && !isPreviewing) {
     return <NotFound />;
   }
