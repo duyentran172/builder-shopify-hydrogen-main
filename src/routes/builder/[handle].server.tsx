@@ -12,7 +12,6 @@ builder.init('67b2e342dd0d44cc8d28efc40c91ada5');
 const MODEL_NAME = 'page';
 
 export default function Page(props: any) {
-  console.log(props)
   const content = useQuery([MODEL_NAME, props.pathname], async () => {
     return await builder
       .get(MODEL_NAME, {
@@ -25,7 +24,6 @@ export default function Page(props: any) {
 
   const params = new URLSearchParams(props.search);
   const isPreviewing = params.has('builder.preview');
-  console.log(content);
 
   return (
     <div>

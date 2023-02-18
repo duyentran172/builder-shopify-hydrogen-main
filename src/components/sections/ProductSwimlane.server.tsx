@@ -17,7 +17,6 @@ export function ProductSwimlane({
   count = 12,
   ...props
 }) {
-  console.log(props)
   const productCardsMarkup = useMemo(() => {
     // If the data is already provided, there's no need to query it, so we'll just return the data
     if (typeof data === 'object') {
