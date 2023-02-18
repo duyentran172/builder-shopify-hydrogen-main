@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState, Suspense } from "react";
 
 // Tabs Components
 import TabOne from "~/components/TabOne";
@@ -9,6 +9,7 @@ import TabItem from "~/components/TabItem";
 type TabsProps = {
   orientation?: "horizontal" | "vertical";
   className?: string;
+  numberOfDisplay: number
 };
 
 type TabsType = {
@@ -51,6 +52,7 @@ const tabs: TabsType = [
 const Tabs: FC<TabsProps> = ({
   className = "tabs-component",
   orientation = "horizontal",
+  numberOfDisplay = 1
 }) => {
   let [products, setProducts] = useState([]);
   const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
@@ -58,7 +60,7 @@ const Tabs: FC<TabsProps> = ({
 
   useEffect(() => {
     const getBestSellers = async () => {
-        const result = await getBestSellersAsync(tabs[selectedTab - 1].sortKey);
+        const result = await getBestSellersAsync(tabs[selectedTab - 1].sortKey, numberOfDisplay);
         setProducts(result)
     }
     getBestSellers();
@@ -94,15 +96,17 @@ const Tabs: FC<TabsProps> = ({
         aria-labelledby={`btn-${selectedTab}`}
         id={`tabpanel-${selectedTab}`}
       >
-        {Panel && <Panel.Component products={products}/>}
+        <Suspense fallback="Loading...">
+          {Panel && <Panel.Component products={products}/>}
+        </Suspense>
       </div>
     </div>
   );
 };
 
-async function getBestSellersAsync(sortKey: string) {
+async function getBestSellersAsync(sortKey: string, numberOfDisplay: number) {
   try {
-      const res = await fetch(`/api/bestSellersNew?sortKey=${encodeURIComponent(sortKey)}`,{
+      const res = await fetch(`/api/bestSellersNew?sortKey=${encodeURIComponent(sortKey)}&numberOfDisplay=${numberOfDisplay}`,{
         method: "GET",
         headers: {
           Accept: 'application/json',

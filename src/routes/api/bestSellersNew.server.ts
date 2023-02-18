@@ -9,7 +9,7 @@ export async function api(
 ) {
 	const url = new URL(_request.url);
 	const sortKey = url.searchParams.get('sortKey')?.toString();
-	console.log(sortKey)
+	const numberOfDisplay = url.searchParams.get('numberOfDisplay') || '1';
   const {
     data: {products},
   } = await queryShop<{
@@ -17,8 +17,8 @@ export async function api(
   }>({
     query: TOP_PRODUCTS_QUERY,
     variables: {
-      count: 4,
-			sortKey
+      count: parseInt(numberOfDisplay),
+			sortKey,
     },
   });
   return products.nodes;
