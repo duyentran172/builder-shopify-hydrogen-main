@@ -28,9 +28,6 @@ export function ProductCardsCarousel({products}: {products: Product[]}) {
     }
 
     if (direction === 'next' && carousel.current !== null) {
-      // console.log(carousel.current.offsetWidth)
-      // console.log(currentIndex)
-      // console.log(maxScrollWidth.current)
       return (
         carousel.current.offsetWidth * currentIndex >= maxScrollWidth.current
       );
@@ -52,7 +49,7 @@ export function ProductCardsCarousel({products}: {products: Product[]}) {
   }, []);
 
   return (
-    <div ref={carousel} className="2xl:container 2xl:mx-auto 2xl:px-0 py-3 px-10">
+    <div className="2xl:container 2xl:mx-auto 2xl:px-0 py-3 px-10">
       <div className="mx-auto">
         <div className="relative overflow-hidden">
           <div className="flex justify-between absolute top left w-full h-full">
@@ -100,6 +97,7 @@ export function ProductCardsCarousel({products}: {products: Product[]}) {
             </button>
           </div>
           <div
+            ref={carousel}
             className="carousel-container relative flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
           >
             {products.map((product) => (

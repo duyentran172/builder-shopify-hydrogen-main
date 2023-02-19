@@ -25,14 +25,18 @@ export const FeatureProducts = (props: any) => {
     return (
         <Section padding="y">
             <h3 className="font-bold text-lead text-center">{title}</h3>
-            <div className={`swimlane hiddenScroll ${turnOnCarousel ? "p-0 block overflow-hidden" : ""}`}>
-                {
-                    turnOnCarousel ? (
-                        <ProductCardsCarousel products={products} />
-                    ) : 
-                    <ProductCards products={products} />
-                }
-            </div>
+            {
+                products && products.length > 0
+                ? <div className={`swimlane hiddenScroll ${turnOnCarousel ? "p-0 block overflow-hidden" : ""}`}>
+                    {
+                        turnOnCarousel ? (
+                            <ProductCardsCarousel products={products} />
+                        ) : 
+                        <ProductCards products={products} />
+                    }
+                </div>
+                : <></>
+            }
         </Section>
     );
 }
