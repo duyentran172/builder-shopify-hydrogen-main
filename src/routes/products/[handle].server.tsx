@@ -21,8 +21,13 @@ import {
   Section,
   Text,
 } from '~/components';
+import {BuilderComponent} from '~/components/BuilderComponent.client';
 
-export default function Product() {
+import {useQuery} from '@shopify/hydrogen';
+import {builder} from '@builder.io/react';
+
+const MODEL_NAME = 'page';
+export default function Product(props: any) {
   const {handle} = useRouteParams();
   const {
     language: {isoCode: languageCode},
@@ -40,10 +45,20 @@ export default function Product() {
     },
     preload: true,
   });
-
+  const content = useQuery([MODEL_NAME, props.pathname], async () => {
+    return await builder
+      .get(MODEL_NAME, {
+        userAttributes: {
+          urlPath: props.pathname,
+        },
+      })
+      .promise();
+  });
   if (!product) {
     return <NotFound type="product" />;
   }
+
+
 
   useServerAnalytics({
     shopify: {
@@ -62,6 +77,7 @@ export default function Product() {
       </Suspense>
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
+          <BuilderComponent model={MODEL_NAME} content={content?.data} data={{product}} />
           <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
               media={media.nodes}
