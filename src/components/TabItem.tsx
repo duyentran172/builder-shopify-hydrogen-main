@@ -9,7 +9,7 @@ type TabsItemProps = {
 const TabItem: FC<TabsItemProps> = ({
   products
 }) => {
-  console.log(products)
+
   return (
     <Grid layout="products">
         {products && products.map((product, index) => (

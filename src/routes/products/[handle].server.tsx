@@ -28,7 +28,7 @@ export default function Product() {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
   } = useLocalization();
-console.log(handle)
+
   const {
     data: {product, shop},
   } = useShopQuery({
