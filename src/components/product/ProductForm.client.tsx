@@ -7,7 +7,7 @@ import {
   AddToCartButton,
   Money,
   OptionWithValues,
-  ShopPayButton,
+  ShopPayButton
 } from '@shopify/hydrogen';
 
 import {Heading, Text, Button, ProductOptions} from '~/components';

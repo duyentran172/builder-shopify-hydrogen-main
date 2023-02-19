@@ -19,7 +19,7 @@ export const AnnouncementBar = () => {
     }, []);
 
     return (
-        showAnnouncementBar && (
+        showAnnouncementBar && builderContentJson && (
             <BuilderComponent
                 model="announcement-bar"
                 content={builderContentJson}

@@ -26,7 +26,6 @@ import {BuilderComponent} from '~/components/BuilderComponent.client';
 import {useQuery} from '@shopify/hydrogen';
 import {builder} from '@builder.io/react';
 
-import {ProductDetailTemplate} from '~/components/product/ProductDetailTemplate.client';
 const MODEL_NAME = 'page';
 export default function Product(props: any) {
   const {handle} = useRouteParams();
@@ -59,6 +58,8 @@ export default function Product(props: any) {
     return <NotFound type="product" />;
   }
 
+
+
   useServerAnalytics({
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.product,
@@ -76,7 +77,7 @@ export default function Product(props: any) {
       </Suspense>
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
-        <BuilderComponent model={MODEL_NAME} content={content?.data} />
+          <BuilderComponent model={MODEL_NAME} content={content?.data} data={{product}} />
           <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
               media={media.nodes}
