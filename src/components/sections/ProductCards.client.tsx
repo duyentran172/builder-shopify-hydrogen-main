@@ -8,7 +8,6 @@ export function ProductCards({products}: {products: Product[]}) {
         <ProductCard
           product={product}
           key={product.id}
-          className={'snap-start w-80'}
         />
       ))}
     </>

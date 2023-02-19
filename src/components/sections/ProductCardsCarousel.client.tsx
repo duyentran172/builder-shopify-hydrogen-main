@@ -22,7 +22,7 @@ export function ProductCardsCarousel({products}: {products: Product[]}) {
     }
   };
 
-  const isDisabled = (direction) => {
+  const isDisabled = (direction: string) => {
     if (direction === 'prev') {
       return currentIndex <= 0;
     }
