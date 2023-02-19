@@ -19,7 +19,7 @@ export const ProductDetailTemplate = (props: any) => {
         .promise().then(setBuilderContentJson);
     }, []);
 
-    return builderContentJson && (
+    return builderContentJson && selectedVariant && (
         <CartProvider>
             <BuilderComponent
                 model="product-template"
@@ -27,14 +27,11 @@ export const ProductDetailTemplate = (props: any) => {
                 data={{ product: props.builderState.state, selectedVariant }}
                 context={{ 
                     myAddToCart: () => {
-                        if(selectedVariant) {
-                            const merchandise = {
-                                merchandiseId: selectedVariant.id || ''
-                            };
-                            linesAdd([merchandise]);
-                        } else {
-                            console.log('qq');
-                        }
+                        const merchandise = {
+                            merchandiseId: selectedVariant.id || '',
+                            quantity: 1
+                        };
+                        linesAdd([merchandise]);
                     }
                 }}
             />
