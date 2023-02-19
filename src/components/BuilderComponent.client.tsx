@@ -2,6 +2,7 @@ import {builder, BuilderComponent, Builder} from '@builder.io/react';
 import "@builder.io/widgets";
 import {BestSeller} from '~/components/BestSeller.client';
 import {FeatureProducts} from '~/components/FeatureProducts.client';
+import { ProductDetailTemplate } from '~/components/product/ProductDetailTemplate.client';
 
 builder.init('67b2e342dd0d44cc8d28efc40c91ada5');
   
@@ -55,6 +56,17 @@ Builder.registerComponent(FeatureProducts, {
             name: 'collections',
             type: 'reference',
             model: 'test-data-model'
+        }
+    ]
+});
+
+Builder.registerComponent(ProductDetailTemplate, { 
+    name: 'Product Detail Template',
+    inputs: [
+        {
+            name: 'template',
+            type: 'reference',
+            model: 'product-template'
         }
     ]
 });
