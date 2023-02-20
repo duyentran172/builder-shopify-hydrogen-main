@@ -8,13 +8,14 @@ builder.init('67b2e342dd0d44cc8d28efc40c91ada5');
 
 export const FeatureProducts = (props: any) => {
     let [products, setProducts] = useState([]);
-    const {title, sortkey, numberOfDisplay, turnOnCarousel, collections} = props;
+    const {title, sortkey, numberOfDisplay, turnOnCarousel, collection} = props;
+    console.log(props)
 
     useEffect(() => {
         const getAsync = async () => {
             const result = await getDataAsync(
                 sortkey,
-                collections.value.data.collections.options.collection,
+                collection,
                 numberOfDisplay
             );
             setProducts(result)
@@ -27,14 +28,13 @@ export const FeatureProducts = (props: any) => {
             <h3 className="font-bold text-lead text-center">{title}</h3>
             {
                 products && products.length > 0
-                ? <div className={`swimlane hiddenScroll ${turnOnCarousel ? "p-0 block overflow-hidden" : ""}`}>
-                    {
-                        turnOnCarousel ? (
-                            <ProductCardsCarousel products={products} />
+                ? (
+                    turnOnCarousel ? (
+                            <div className={`swimlane hiddenScroll ${turnOnCarousel ? "p-0 block overflow-hidden" : ""}`}>
+                                <ProductCardsCarousel products={products} />
+                            </div>
                         ) : 
-                        <ProductCards products={products} />
-                    }
-                </div>
+                        <ProductCards products={products} />)
                 : <></>
             }
         </Section>
@@ -43,11 +43,11 @@ export const FeatureProducts = (props: any) => {
 
 async function getDataAsync(
     sortKey: string,
-    collectionId: string,
+    collection: string,
     numberOfProductsDisplayed: number
 ) {
     try {
-        const res = await fetch(`/api/featureProducts?sortKey=${encodeURIComponent(sortKey)}&collectionId=${encodeURIComponent(collectionId)}&numberOfProductsDisplayed=${encodeURIComponent(numberOfProductsDisplayed)}`,{
+        const res = await fetch(`/api/featureProducts?sortKey=${encodeURIComponent(sortKey)}&collection=${encodeURIComponent(collection)}&numberOfProductsDisplayed=${encodeURIComponent(numberOfProductsDisplayed)}`,{
           method: "GET",
           headers: {
             Accept: 'application/json',
