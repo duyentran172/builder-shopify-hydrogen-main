@@ -9,7 +9,6 @@ builder.init('67b2e342dd0d44cc8d28efc40c91ada5');
 export const FeatureProducts = (props: any) => {
     let [products, setProducts] = useState([]);
     const {title, sortkey, numberOfDisplay, turnOnCarousel, collection} = props;
-    console.log(props)
 
     useEffect(() => {
         const getAsync = async () => {

@@ -11,7 +11,7 @@ Builder.registerComponent(BestSeller, {
     inputs: [
         { 
             name: 'title',
-            type: 'text',
+            type: 'richText',
             friendlyName: 'Title',
             defaultValue: 'Please enter Title'
         },
