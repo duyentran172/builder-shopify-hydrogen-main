@@ -17,6 +17,12 @@ import {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+import {FeatureProducts} from '~/components/FeatureProducts.client';
+import {BuilderComponent} from '~/components/BuilderComponent.client';
+
+import {useQuery} from '@shopify/hydrogen';
+import {builder} from '@builder.io/react';
+
 
 export default function Homepage() {
   useServerAnalytics({
@@ -43,6 +49,16 @@ function HomepageContent() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
+  const content = useQuery(["page", '/'], async () => {
+    return await builder
+      .get("page", {
+        userAttributes: {
+          urlPath: "/",
+        },
+      })
+      .promise();
+  });
+
   const {data} = useShopQuery<{
     heroBanners: CollectionConnection;
     featuredCollections: CollectionConnection;
@@ -65,6 +81,7 @@ function HomepageContent() {
 
   return (
     <>
+      <BuilderComponent model="page" content={content?.data} />
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
