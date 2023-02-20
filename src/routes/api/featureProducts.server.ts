@@ -10,7 +10,7 @@ export async function api(
 	const url = new URL(_request.url);
 	const sortKey = url.searchParams.get('sortKey')?.toString();
 	const numberOfProductsDisplayed = url.searchParams.get('numberOfProductsDisplayed') || '50';
-	const collectionId = url.searchParams.get('collectionId');
+	const collectionHandle = url.searchParams.get('collection');
 
   const {
     data: {featuredProducts},
@@ -20,7 +20,7 @@ export async function api(
     query: HOMEPAGE_CONTENT_QUERY ,
     variables: {
 			sortKey,
-      collectionId: collectionId,
+      collectionHandle,
       count: parseInt(numberOfProductsDisplayed),
     },
   });
@@ -46,11 +46,11 @@ const TOP_PRODUCTS_QUERY = gql`
 const HOMEPAGE_CONTENT_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
   query homepage(
-    $collectionId: ID
+    $collectionHandle: String
     $count: Int
     $sortKey: ProductCollectionSortKeys
   ) {
-    featuredProducts: collection(id: $collectionId) {
+    featuredProducts: collection(handle: $collectionHandle) {
       products(
         first: $count,
         sortKey: $sortKey

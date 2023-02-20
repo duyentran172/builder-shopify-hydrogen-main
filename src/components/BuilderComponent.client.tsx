@@ -53,9 +53,8 @@ Builder.registerComponent(FeatureProducts, {
             defaultValue: false
         },
         {
-            name: 'collections',
-            type: 'reference',
-            model: 'test-data-model'
+            name: 'collection',
+            type: 'ShopifyCollectionHandle'
         }
     ]
 });
