@@ -1,6 +1,6 @@
 import {gql} from '@shopify/hydrogen';
 import type {HydrogenApiRouteOptions, HydrogenRequest} from '@shopify/hydrogen';
-import {ProductConnection} from '@shopify/hydrogen/storefront-api-types';
+import {ProductConnection, Collection} from '@shopify/hydrogen/storefront-api-types';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export async function api(
@@ -10,18 +10,22 @@ export async function api(
 	const url = new URL(_request.url);
 	const sortKey = url.searchParams.get('sortKey')?.toString();
 	const numberOfDisplay = url.searchParams.get('numberOfDisplay') || '1';
+  const isOnsale = url.searchParams.get('isOnsale');
+
   const {
-    data: {products},
+    data: {products, featuredProducts},
   } = await queryShop<{
     products: ProductConnection;
+    featuredProducts: Collection;
   }>({
-    query: TOP_PRODUCTS_QUERY,
+    query: isOnsale === 'true' ? PRODUCT_ONSALES : TOP_PRODUCTS_QUERY,
     variables: {
       count: parseInt(numberOfDisplay),
 			sortKey,
     },
   });
-  return products.nodes;
+
+  return isOnsale === 'true' ? featuredProducts.products.nodes : products.nodes;
 }
 
 const TOP_PRODUCTS_QUERY = gql`
@@ -39,3 +43,20 @@ const TOP_PRODUCTS_QUERY = gql`
     }
   }
 `;
+
+const PRODUCT_ONSALES = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query topProducts(
+    $sortKey: String
+    $count: Int
+  ){
+    featuredProducts: collection(handle: $sortKey) {
+      products(first: $count) {
+        nodes {
+          ...ProductCard
+        }
+      }
+    }
+  }
+`;
+

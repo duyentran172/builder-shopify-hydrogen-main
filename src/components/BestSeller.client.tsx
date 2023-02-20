@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, createElement} from 'react';
 import { BuilderComponent, builder, Builder } from '@builder.io/react'
 import type {Product, Country} from '@shopify/hydrogen/storefront-api-types';
 import {fetchSync} from '@shopify/hydrogen';
@@ -14,11 +14,11 @@ builder.init('67b2e342dd0d44cc8d28efc40c91ada5');
 
 export const BestSeller = (props: any) => {
     let {title, numberOfDisplay} = props;
-
+    const renderHTML = (rawHTML: string) => createElement("div", { dangerouslySetInnerHTML: { __html: rawHTML } });
     return (
         <>
             <Section padding="y">
-                <h3 className="font-bold text-lead text-center">{title}</h3>
+                <h3 className="font-bold text-lead text-center">{renderHTML(title)}</h3>
                 <Tabs numberOfDisplay={numberOfDisplay} />
             </Section>
         </>

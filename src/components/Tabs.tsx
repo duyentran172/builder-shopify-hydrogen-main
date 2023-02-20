@@ -17,6 +17,7 @@ type TabsType = {
   index: number;
   Component: React.FC<{products: []}>;
   sortKey: string;
+  isOnsale: boolean
 }[];
 
 // Tabs Array
@@ -26,18 +27,21 @@ const tabs: TabsType = [
     index: 1,
     Component: TabItem,
     sortKey: 'BEST_SELLING',
+    isOnsale: false
   },
   {
     label: "New Arrivals",
     index: 2,
     Component: TabItem,
     sortKey: 'CREATED_AT',
+    isOnsale: false
   },
   {
     label: "On Sale",
     index: 3,
     Component: TabItem,
-    sortKey: 'UPDATED_AT',
+    sortKey: 'on-sale',
+    isOnsale: true
   }
 ];
 
@@ -60,7 +64,11 @@ const Tabs: FC<TabsProps> = ({
 
   useEffect(() => {
     const getBestSellers = async () => {
-        const result = await getBestSellersAsync(tabs[selectedTab - 1].sortKey, numberOfDisplay);
+        const result = await getBestSellersAsync(
+          tabs[selectedTab - 1].sortKey,
+          numberOfDisplay,
+          tabs[selectedTab - 1].isOnsale
+          );
         setProducts(result)
     }
     getBestSellers();
@@ -104,9 +112,9 @@ const Tabs: FC<TabsProps> = ({
   );
 };
 
-async function getBestSellersAsync(sortKey: string, numberOfDisplay: number) {
+async function getBestSellersAsync(sortKey: string, numberOfDisplay: number, isOnsale: boolean) {
   try {
-      const res = await fetch(`/api/bestSellersNew?sortKey=${encodeURIComponent(sortKey)}&numberOfDisplay=${numberOfDisplay}`,{
+      const res = await fetch(`/api/bestSellersNew?sortKey=${encodeURIComponent(sortKey)}&numberOfDisplay=${numberOfDisplay}&isOnsale=${isOnsale}`,{
         method: "GET",
         headers: {
           Accept: 'application/json',
