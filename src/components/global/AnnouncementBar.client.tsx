@@ -8,7 +8,7 @@ export const AnnouncementBar = () => {
     const [showAnnouncementBar, setShowAnnouncementBar] = useState(true);
 
     useEffect(() => { 
-        builder.get('announcement-bar', { url: location.pathname, entry: '67b2e342dd0d44cc8d28efc40c91ada5_13935532852740abae5183e8f0d8777a' })
+        builder.get('announcement-bar', { entry: '67b2e342dd0d44cc8d28efc40c91ada5_13935532852740abae5183e8f0d8777a' })
         .promise().then(setBuilderContentJson);
 
         const isShown = JSON.parse(localStorage.getItem('isShownAnnouncementBar') ?? 'true');
