@@ -25,6 +25,7 @@ import {BuilderComponent} from '~/components/BuilderComponent.client';
 
 import {useQuery} from '@shopify/hydrogen';
 import {builder} from '@builder.io/react';
+import {ProductDetailTemplate1} from '~/components/product/ProductDetailTemplate1.client';
 
 const MODEL_NAME = 'page';
 export default function Product(props: any) {
@@ -77,6 +78,7 @@ export default function Product(props: any) {
       </Suspense>
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
+          <ProductDetailTemplate1 product={product}  />
           <BuilderComponent model={MODEL_NAME} content={content?.data} data={{product}} />
           <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
