@@ -10,6 +10,7 @@ builder.init('67b2e342dd0d44cc8d28efc40c91ada5')
 
 export const ProductDetailTemplate = (props: any) => {
     const {template} = props;
+    console.log(props)
     const [builderContentJson, setBuilderContentJson] = useState(null);
     const {selectedVariant} = useProductOptions();
     
