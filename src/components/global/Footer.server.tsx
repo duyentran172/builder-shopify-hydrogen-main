@@ -2,6 +2,7 @@ import {useUrl} from '@shopify/hydrogen';
 
 import {Section, Heading, FooterMenu, CountrySelector} from '~/components';
 import type {EnhancedMenu} from '~/lib/utils';
+import {Newsletter} from '~/components/global/Newsletter.client';
 
 /**
  * A server component that specifies the content of the footer on the website
@@ -34,6 +35,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
           Country
         </Heading>
         <CountrySelector />
+        <Newsletter />
       </section>
       <div
         className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
